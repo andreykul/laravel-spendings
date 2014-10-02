@@ -2,6 +2,11 @@
 
 class BaseController extends Controller {
 
+	public function __construct()
+    {
+    	$this->data = array();
+    }
+
 	/**
 	 * Setup the layout used by the controller.
 	 *
