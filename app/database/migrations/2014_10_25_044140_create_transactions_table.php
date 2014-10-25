@@ -16,9 +16,6 @@ class CreateTransactionsTable extends Migration {
 		{
 			$table->increments('id');
 			$table->integer('account_id');
-			$table->foreign('account_id')
-					->references('id')->on('accounts')
-					->onDelete('cascade');
 			$table->string('added_by');
 			$table->date('date');
 			$table->string('tag');
