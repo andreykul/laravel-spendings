@@ -2,85 +2,54 @@
 
 class UsersController extends \BaseController {
 
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return Response
-	 */
-	public function index()
+	public function getLogin()
 	{
-		//
+		return View::make('login');
 	}
 
-
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return Response
-	 */
-	public function create()
+	public function postLogin()
 	{
-		//
+		$user_data = Input::get('user');
+
+		$validator = Validator::make($user_data, User::$log_rules);
+
+	    if ($validator->fails())
+			return Redirect::back()->withErrors($validator->messages()->all());
+		else {
+			if (Auth::attempt($user_data))
+				return Redirect::intended('/');
+			else return Redirect::back()->withErrors(array("We could not find a record that matches the Username and Password provided."));
+		}
 	}
 
-
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
-	public function store()
+	public function getRegister()
 	{
-		//
+		return View::make('register');
 	}
 
-
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id)
+	public function postRegister()
 	{
-		//
+		$user_data = Input::get('user');
+
+		$validator = Validator::make($user_data, User::$reg_rules);
+
+		if ($validator->fails())
+			return Redirect::back()->withErrors($validator->messages()->all());
+		else {
+			$user = new User;
+			$user->email = $user_data['email'];
+			$user->name = $user_data['name'];
+			$user->password = Hash::make($user_data['password']);
+			$user->save();
+
+			Auth::login($user);
+			return Redirect::route('home');
+		}
 	}
 
-
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($id)
+	public function getLogout()
 	{
-		//
+		Auth::logout();
+		return Redirect::route('home');
 	}
-
-
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
-	{
-		//
-	}
-
-
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function destroy($id)
-	{
-		//
-	}
-
-
 }

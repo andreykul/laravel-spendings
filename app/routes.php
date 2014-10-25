@@ -11,5 +11,14 @@
 |
 */
 
-Route::get('/', "HomeController@index");
-Route::resource('spendings', 'SpendingsController');
+Route::group(array('before' => 'auth'), function(){
+	Route::get('/', array('uses' => "AccountsController@index", 'as' => 'home'));
+	Route::post('accounts/{accounts}/share', array('uses' => "AccountsController@share", 'as' => 'accounts.share'));
+	Route::resource('accounts', 'AccountsController', array('only' => array('index','show','store','destroy')));
+	Route::resource('accounts.transactions', 'TransactionsController', array('only' => array('index','store','destroy')));
+});
+Route::get('login', array('uses' => 'UsersController@getLogin', 'as' => 'login'));
+Route::post('login', array('uses' => 'UsersController@postLogin', 'as' => 'login'));
+Route::get('logout', array('uses' => 'UsersController@getLogout', 'as' => 'logout'));
+Route::get('register', array('uses' => 'UsersController@getRegister', 'as' => 'register'));
+Route::post('register', array('uses' => 'UsersController@postRegister', 'as' => 'register'));
