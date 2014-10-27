@@ -20,6 +20,7 @@
 				<th>Name</th>
 				<th>Balance</th>
 				<th>Owners</th>
+				<th>Options</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -37,6 +38,11 @@
 						{{ Form::open(array('route' => array('accounts.share',$account->id), 'class' => 'form-inline')) }}
 							<input type="email" name="email" placeholder="Email" class="form-control">
 							<button type="submit" class="btn btn-primary">Share</button>
+						{{ Form::close() }}
+					</td>
+					<td>
+						{{ Form::open(array('route' => array('accounts.destroy',$account->id), 'method' => 'delete', 'class' => 'form-inline')) }}
+							<button type="submit" class="btn btn-danger">Delete</button>
 						{{ Form::close() }}
 					</td>
 				</tr>

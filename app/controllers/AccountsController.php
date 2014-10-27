@@ -25,7 +25,7 @@ class AccountsController extends BaseController {
 		if (! $account )
 			return Redirect::back()->withErrors(array('You are not allowed to delete this account.'));
 
-		Auth::user()->accounts()->dettach($account->id);
+		Auth::user()->accounts()->detach($account->id);
 		$account->delete();
 		
 		return Redirect::back();
