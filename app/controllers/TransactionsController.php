@@ -7,7 +7,8 @@ class TransactionsController extends BaseController {
 		$account = Auth::user()->accounts()->find($account_id);
 
 		if(! $account )
-			return Redirect::route('home');
+			return Redirect::route('home')
+				->withErrors(array("You don't own this account."));
 
 		$this->data['account'] = $account;
 		$this->data['transactions'] = $account->transactions()->orderBy('date','desc')->get();
@@ -24,7 +25,8 @@ class TransactionsController extends BaseController {
 		$account = Auth::user()->accounts()->find($account_id);
 
 		if(! $account )
-			return Redirect::route('home');
+			return Redirect::route('home')
+				->withErrors(array("You don't own this account."));
 
 		$transaction_info = Input::get('transaction');
 
@@ -56,7 +58,8 @@ class TransactionsController extends BaseController {
 		$account = Auth::user()->accounts()->find($account_id);
 
 		if(! $account )
-			return Redirect::route('home');
+			return Redirect::route('home')
+				->withErrors(array("You don't own this account."));
 
 		$transaction = Transaction::find($id);
 
@@ -69,7 +72,7 @@ class TransactionsController extends BaseController {
 		}
 		else return Redirect::back()->withErrors(array('You are not allowed to remove this transaction.'));
 
-		return Redirect::back();
+		return Redirect::back()->withStatus('Transaction has been removed.');
 	}
 
 }
