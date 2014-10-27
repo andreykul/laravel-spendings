@@ -28,7 +28,7 @@ class AccountsController extends BaseController {
 		Auth::user()->accounts()->detach($account->id);
 		$account->delete();
 		
-		return Redirect::back();
+		return Redirect::back()->withStatus("Accounts has been succesfully removed.");
 	}
 
 	public function share($id)
