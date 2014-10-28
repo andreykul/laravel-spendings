@@ -38,7 +38,9 @@
 							<option value="Bills">Bills</option>
 							<option value="Groceries">Groceries</option>
 							<option value="Going out">Going out</option>
-							<option value="Household">Household Items</option>
+							<option value="Household Items">Household Items</option>
+							<option value="Miscellaneous">Miscellaneous</option>
+							<option value="Cloths/Makeup">Cloths/Makeup</option>
 							<option value="Liza">Liza</option>
 							<option value="Loans">Loans</option>
 						</select>
