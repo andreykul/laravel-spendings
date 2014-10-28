@@ -5,7 +5,7 @@
 			<h2>Login</h2>
 			{{ Form::open(array('route' => 'login')) }}
 				<div class="form-group">
-					<input type="text" name="user[nickname]" class="form-control text-center" placeholder="Nickname" required autofocus>
+					<input type="email" name="user[email]" class="form-control text-center" placeholder="Email" required autofocus>
 					<input type="password" name="user[password]" class="form-control text-center" placeholder="Password" required>
 				</div>
 				<div class="form-group">
