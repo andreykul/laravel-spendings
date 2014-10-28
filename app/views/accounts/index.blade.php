@@ -36,7 +36,7 @@
 						@endforeach
 
 						{{ Form::open(array('route' => array('accounts.share',$account->id), 'class' => 'form-inline')) }}
-							<input type="email" name="email" placeholder="Email" class="form-control">
+							<input type="nickname" name="text" placeholder="Nickname" class="form-control">
 							<button type="submit" class="btn btn-primary">Share</button>
 						{{ Form::close() }}
 					</td>

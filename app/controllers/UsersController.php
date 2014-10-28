@@ -37,7 +37,7 @@ class UsersController extends \BaseController {
 			return Redirect::back()->withErrors($validator->messages()->all());
 		else {
 			$user = new User;
-			$user->email = $user_data['email'];
+			$user->nickname = $user_data['nickname'];
 			$user->name = $user_data['name'];
 			$user->password = Hash::make($user_data['password']);
 			$user->save();

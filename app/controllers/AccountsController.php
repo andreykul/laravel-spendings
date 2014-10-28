@@ -43,9 +43,9 @@ class AccountsController extends BaseController {
 		if (! $account )
 			return Redirect::back()->withErrors(array('You are not allowed to share this account.'));
 
-		$user = User::where('email','=',Input::get('email'))->first();
+		$user = User::where('nickname','=',Input::get('nickname'))->first();
 		if(! $user)
-			return Redirect::back()->withErrors(array('Sorry we could not find such email in our system.'));
+			return Redirect::back()->withErrors(array('Sorry we could not find such nickname in our system.'));
 
 		$user->accounts()->attach($account->id);
 		return Redirect::back();
