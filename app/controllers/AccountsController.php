@@ -11,7 +11,11 @@ class AccountsController extends BaseController {
 
 	public function store()
 	{
-		$account = Account::create(Input::get('account'));
+		$account_info = Input::get('account');
+		$account = new Account;
+		$account->name = $account_info['name'];
+		$account->user_id = Auth::user()->id;
+		$account->save();
 		
 		Auth::user()->accounts()->attach($account->id);
 
@@ -26,7 +30,8 @@ class AccountsController extends BaseController {
 			return Redirect::back()->withErrors(array('You are not allowed to delete this account.'));
 
 		Auth::user()->accounts()->detach($account->id);
-		$account->delete();
+		if ( Auth::user()->owns()->find($id) )
+			$account->delete();
 		
 		return Redirect::back()->withStatus("Accounts has been succesfully removed.");
 	}

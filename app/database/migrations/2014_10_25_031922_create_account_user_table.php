@@ -14,10 +14,8 @@ class CreateAccountUserTable extends Migration {
 	{
 		Schema::create('account_user', function(Blueprint $table)
 		{
-			$table->increments('id');
 			$table->integer('user_id');
 			$table->integer('account_id');
-			$table->timestamps();
 		});
 	}
 
