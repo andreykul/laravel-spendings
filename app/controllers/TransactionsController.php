@@ -23,7 +23,9 @@ class TransactionsController extends BaseController {
 		// Find all years for which this account has transactions
 		$this->data['years'] = array();
 		$first_transaction = $account->transactions()->orderBy('date')->first();
-		$date = new DateTime($first_transaction->date);
+		if (! $first_transaction)
+			$date = new DateTime;
+		else $date = new DateTime($first_transaction->date);
 		$today = date('Y-m-t');
 		while ($date->format("Y-m-d") <= $today) {
 			array_unshift($this->data['years'], $date->format("Y"));
@@ -44,7 +46,9 @@ class TransactionsController extends BaseController {
 		// Find all months for which this account has transactions
 		$this->data['months'] = array();
 		$first_transaction = $account->transactions()->where('date','>',date('Y-m-d',strtotime("January 1st ".$start_year)))->orderBy('date')->first();
-		$date = new DateTime($first_transaction->date);
+		if (! $first_transaction)
+			$date = new DateTime;
+		else $date = new DateTime($first_transaction->date);
 		$today = date('Y-m-t');
 		while ($date->format("Y-m-d") <= $today) {
 			array_unshift($this->data['months'], $date->format("F"));
