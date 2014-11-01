@@ -20,20 +20,30 @@ class TransactionsController extends BaseController {
 			$year = Input::get('year');
 		else $year = date('Y');
 
-		if ($month == "All")
+		// Find all years for which this account has transactions
+		$this->data['years'] = array();
+		$first_transaction = $account->transactions()->orderBy('date')->first();
+		$date = new DateTime($first_transaction->date);
+		$today = date('Y-m-t');
+		while ($date->format("Y-m-d") <= $today) {
+			array_unshift($this->data['years'], $date->format("Y"));
+			$date->modify('next year');
+		}
+
+		if ($year == "All")
 		{
-			$start_date = date('Y-m-01', strtotime("January ".$year));
-			$end_date = date('Y-m-t', strtotime("December ".$year));
+			$start_year = end($this->data['years']);
+			$end_year = $this->data['years'][0];
 		}
 		else
 		{
-			$start_date = date('Y-m-01', strtotime($month." ".$year));
-			$end_date = date('Y-m-t', strtotime($month." ".$year));
+			$start_year = $year;
+			$end_year = $year;
 		}
-		
-		$this->data['years'] = array();
+
+		// Find all months for which this account has transactions
 		$this->data['months'] = array();
-		$first_transaction = $account->transactions()->orderBy('date')->first();
+		$first_transaction = $account->transactions()->where('date','>',date('Y-m-d',strtotime("January 1st ".$start_year)))->orderBy('date')->first();
 		$date = new DateTime($first_transaction->date);
 		$today = date('Y-m-t');
 		while ($date->format("Y-m-d") <= $today) {
@@ -41,12 +51,19 @@ class TransactionsController extends BaseController {
 			$date->modify('next month');
 		}
 
-		$date = new DateTime($first_transaction->date);
-		$today = date('Y-m-t');
-		while ($date->format("Y-m-d") <= $today) {
-			array_unshift($this->data['years'], $date->format("Y"));
-			$date->modify('next year');
+		if ($month == "All")
+		{
+			$start_month = end($this->data['months']);
+			$end_month = $this->data['months'][0];
 		}
+		else
+		{
+			$start_month = $month;
+			$end_month = $month;
+		}
+
+		$start_date = date('Y-m-01', strtotime($start_month." ".$start_year));
+		$end_date = date('Y-m-t', strtotime($end_month." ".$end_year));
 
 		$this->data['transactions'] = $account->transactions()->whereBetween("date",array($start_date,$end_date))->orderBy('date','desc')->get();
 		$this->data['withdraws'] = 0;
