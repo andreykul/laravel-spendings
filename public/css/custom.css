@@ -6,3 +6,15 @@
 .table>tfoot>tr>td {
 	vertical-align: middle;
 }
+
+#date {
+	width: 170px;
+}
+
+#tag, #description, #name {
+	min-width: 150px;
+}
+
+#withdraw, #deposit {
+	min-width: 80px;
+}

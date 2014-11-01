@@ -11,11 +11,52 @@ class TransactionsController extends BaseController {
 				->withErrors(array("You don't own this account."));
 
 		$this->data['account'] = $account;
-		$this->data['transactions'] = $account->transactions()->orderBy('date','desc')->get();
+
+		if (Input::has('month'))
+			$month = Input::get('month');
+		else $month = date('F');
+
+		if (Input::has('year'))
+			$year = Input::get('year');
+		else $year = date('Y');
+
+		if ($month == "All")
+		{
+			$start_date = date('Y-m-01', strtotime("January ".$year));
+			$end_date = date('Y-m-t', strtotime("December ".$year));
+		}
+		else
+		{
+			$start_date = date('Y-m-01', strtotime($month." ".$year));
+			$end_date = date('Y-m-t', strtotime($month." ".$year));
+		}
+		
+		$this->data['years'] = array();
+		$this->data['months'] = array();
+		$first_transaction = $account->transactions()->orderBy('date')->first();
+		$date = new DateTime($first_transaction->date);
+		$today = date('Y-m-t');
+		while ($date->format("Y-m-d") <= $today) {
+			array_unshift($this->data['months'], $date->format("F"));
+			$date->modify('next month');
+		}
+
+		$date = new DateTime($first_transaction->date);
+		$today = date('Y-m-t');
+		while ($date->format("Y-m-d") <= $today) {
+			array_unshift($this->data['years'], $date->format("Y"));
+			$date->modify('next year');
+		}
+
+		$this->data['transactions'] = $account->transactions()->whereBetween("date",array($start_date,$end_date))->orderBy('date','desc')->get();
 		$this->data['withdraws'] = 0;
 		$this->data['deposits'] = 0;
 		foreach ($this->data['transactions'] as $transaction)
 			$this->data[ $transaction->withdraw?'withdraws':'deposits'] += $transaction->amount;
+
+		
+		$this->data['selected_month'] = $month;
+		$this->data['selected_year'] = $year;
 
 		return View::make("transactions.index")->with($this->data);
 	}
