@@ -102,11 +102,11 @@
 							<td>{{ $transaction->tag }}</td>
 							<td>{{ $transaction->description }}</td>
 							@if ($transaction->withdraw)
-								<td>{{ $transaction->amount }}</td>
+								<td>{{ number_format($transaction->amount,2) }}</td>
 								<td></td>
 							@else
 								<td></td>
-								<td>{{ $transaction->amount }}</td>
+								<td>{{ number_format($transaction->amount,2) }}</td>
 							@endif
 							<td>{{ $transaction->added_by }}</td>
 							<td>
@@ -123,10 +123,10 @@
 						<td></td>
 						<td></td>
 						<td>
-							{{ $withdraws }}
+							{{ number_format($withdraws,2) }}
 						</td>
 						<td>
-							{{ $deposits }}
+							{{ number_format($deposits,2) }}
 						</td>
 						<td></td>
 						<td></td>
