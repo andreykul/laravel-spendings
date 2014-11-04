@@ -4,7 +4,7 @@
 		<h1>
 			Spendings Tracker
 			<small>{{ $account->name }} : ${{ number_format($account->balance,2) }}</small>
-			<a href="logout" class="btn btn-warning col-xs-2 pull-right ">Logout</a>
+			<a href="{{ route('logout') }}" class="btn btn-warning col-xs-2 pull-right ">Logout</a>
 		</h1>
 	</div>
 
