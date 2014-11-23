@@ -146,18 +146,13 @@ class TransactionsController extends BaseController {
 	{
 		$transactions = $account->transactions()->orderBy('date')->get();
 
-		$first_transaction = $transactions[0];
-		if ($first_transaction->withdraw)
-			$first_transaction->balance = -$first_transaction->amount;
-		else $first_transaction->balance = $first_transaction->amount;
-		$first_transaction->save();
-
-		$prev = $first_transaction;
+		$prev = 0;
 		foreach ($transactions as $transaction) {
 			if($transaction->withdraw)
-				$transaction->balance = $prev->balance - $transaction->amount;
-			else $transaction->balance = $prev->balance + $transaction->amount;
-			$prev = $transaction;
+				$transaction->balance = $prev - $transaction->amount;
+			else $transaction->balance = $prev + $transaction->amount;
+			$prev = $transaction->balance;
+			$transaction->save();
 		}
 	}
 
