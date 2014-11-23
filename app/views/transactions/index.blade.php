@@ -19,21 +19,41 @@
 			{{ Form::open(array('route' => array('accounts.transactions.index',$account->id), 'method' => 'get')) }}
 				<fieldset>
 					<legend>Filter</legend>
-					<label for="year">Year</label>
-					<select name="year" id="year" class="form-control">
-						<option value="All">All</option>
-						@foreach($years as $year)
-							<option value="{{ $year }}" @if ($selected_year == $year) selected @endif>{{ $year }}</option>
-						@endforeach
-					</select>
+					<div class="form-group">
+						<label for="year">Year</label>
+						<select name="year" id="year" class="form-control">
+							<option value="All">All</option>
+							@foreach($years as $year)
+								<option value="{{ $year }}" @if ($selected_year == $year) selected @endif>{{ $year }}</option>
+							@endforeach
+						</select>	
+					</div>
+					
+					<div class="form-group">
+						<label for="month">Month</label>
+						<select name="month" id="month" class="form-control">
+							<option value="All">All</option>
+							@foreach($months as $month)
+								<option value="{{ $month }}" @if ($selected_month == $month) selected @endif>{{ $month }}</option>
+							@endforeach
+						</select>
+					</div>
 
-					<label for="month">Month</label>
-					<select name="month" id="month" class="form-control">
-						<option value="All">All</option>
-						@foreach($months as $month)
-							<option value="{{ $month }}" @if ($selected_month == $month) selected @endif>{{ $month }}</option>
-						@endforeach
-					</select>
+					<div class="form-group">
+						<label>Tags</label>
+						<ul class="list-unstyled">
+							@foreach($tags as $tag)
+							<li class="checkbox">
+								<label>
+									<input name="tags[]" 
+										value="{{ $tag }}" 
+										type="checkbox"
+										@if (in_array($tag,$selected_tags)) checked @endif>{{ $tag }}
+								</label>
+							</li>
+							@endforeach
+						</ul>
+					</div>
 
 					<br>
 					<button type="submit" class="btn btn-primary btn-block">Update</button>	
@@ -66,15 +86,9 @@
 							</td>
 							<td id="tag">
 								<select name="transaction[tag]" class="form-control text-center">
-									<option value="Income">Income</option>
-									<option value="Bills">Bills</option>
-									<option value="Groceries">Groceries</option>
-									<option value="Going out">Going out</option>
-									<option value="Household Items">Household Items</option>
-									<option value="Miscellaneous">Miscellaneous</option>
-									<option value="Cloths/Makeup">Cloths/Makeup</option>
-									<option value="Liza">Liza</option>
-									<option value="Loans">Loans</option>
+									@foreach ($tags as $tag)
+										<option value="{{ $tag }}">{{ $tag }}</option>
+									@endforeach
 								</select>
 							</td>
 							<td id="description">

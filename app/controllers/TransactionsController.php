@@ -74,12 +74,21 @@ class TransactionsController extends BaseController {
 		$start_date = date('Y-m-01', strtotime($start_month." ".$start_year));
 		$end_date = date('Y-m-t', strtotime($end_month." ".$end_year));
 
-		$this->data['transactions'] = $account->transactions()->whereBetween("date",array($start_date,$end_date))->orderBy('date','desc')->get();
+
+		// Filter by selected tags, by default all are selected
+		$this->data['tags'] = array('Income','Bills','Groceries','Going out','Household Items','Miscellaneous','Cloths/Makeup','Liza','Loans');
+		$this->data['selected_tags'] = Input::has('tags') ? Input::get('tags') : $this->data['tags'];
+
+
+		$this->data['transactions'] = $account->transactions()
+			->whereBetween("date",array($start_date,$end_date))
+			->whereIn('tag',$this->data['selected_tags'])
+			->orderBy('date','desc')
+			->get();
 		$this->data['withdraws'] = 0;
 		$this->data['deposits'] = 0;
 		foreach ($this->data['transactions'] as $transaction)
 			$this->data[ $transaction->withdraw?'withdraws':'deposits'] += $transaction->amount;
-
 		
 		$this->data['selected_month'] = $month;
 		$this->data['selected_year'] = $year;
