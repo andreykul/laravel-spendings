@@ -51,7 +51,7 @@
 						<th class="text-center">Description</th>
 						<th class="text-center">Withdraws</th>
 						<th class="text-center">Deposits</th>
-						<th class="text-center col-xs-2">Added by</th>
+						<th class="text-center col-xs-1">Balance</th>
 						<th class="text-center">Options</th>
 					</tr>
 				</thead>
@@ -86,9 +86,7 @@
 							<td id="deposit">
 								<input type="number" step="0.01" name="transaction[deposit]" class="form-control text-center" placeholder="X.XX">
 							</td>
-							<td id="name">
-								<input type="hidden" name="transaction[added_by]" value="{{ Auth::user()->name }}">
-								{{ Auth::user()->name }}
+							<td id="balance">
 							</td>
 							<td>
 								<button type="submit" class="btn btn-xs btn-block btn-success">Add</button>
@@ -108,7 +106,7 @@
 								<td></td>
 								<td>{{ number_format($transaction->amount,2) }}</td>
 							@endif
-							<td>{{ $transaction->added_by }}</td>
+							<td>{{ number_format($transaction->balance,2) }}</td>
 							<td>
 								{{ Form::open(array('route' => array('accounts.transactions.destroy',$account->id,$transaction->id), 'method' => 'delete')) }}
 									<input type="hidden" name="id" value="{{ $transaction->id }}">

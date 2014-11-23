@@ -25,7 +25,12 @@ class TransactionsController extends BaseController {
 		$first_transaction = $account->transactions()->orderBy('date')->first();
 		if (! $first_transaction)
 			$date = new DateTime;
-		else $date = new DateTime($first_transaction->date);
+		else 
+		{
+			$date = new DateTime($first_transaction->date);
+			if($first_transaction->balance == 0)
+				$this->updateMissingBalance($account);
+		}
 		$today = date('Y-m-t');
 		while ($date->format("Y-m-d") <= $today) {
 			array_unshift($this->data['years'], $date->format("Y"));
@@ -93,7 +98,6 @@ class TransactionsController extends BaseController {
 		$transaction_info = Input::get('transaction');
 
 		$transaction = new Transaction;
-		$transaction->added_by = $transaction_info['added_by'];
 		$transaction->account_id = $account_id;
 		$transaction->date = $transaction_info['date'];
 		$transaction->tag = $transaction_info['tag'];
@@ -109,6 +113,7 @@ class TransactionsController extends BaseController {
 			$account->balance -= $transaction->amount;
 			$transaction->withdraw = true;
 		}
+		$transaction->balance = $account->balance;
 		$transaction->save();
 		$account->save();
 
@@ -135,6 +140,25 @@ class TransactionsController extends BaseController {
 		else return Redirect::back()->withErrors(array('You are not allowed to remove this transaction.'));
 
 		return Redirect::back()->withStatus('Transaction has been removed.');
+	}
+
+	private function updateMissingBalance($account)
+	{
+		$transactions = $account->transactions()->orderBy('date')->get();
+
+		$first_transaction = $transactions[0];
+		if ($first_transaction->withdraw)
+			$first_transaction->balance = -$first_transaction->amount;
+		else $first_transaction->balance = $first_transaction->amount;
+		$first_transaction->save();
+
+		$prev = $first_transaction;
+		foreach ($transactions as $transaction) {
+			if($transaction->withdraw)
+				$transaction->balance = $prev->balance - $transaction->amount;
+			else $transaction->balance = $prev->balance + $transaction->amount;
+			$prev = $transaction;
+		}
 	}
 
 }
