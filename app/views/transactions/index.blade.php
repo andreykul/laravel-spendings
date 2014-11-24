@@ -1,4 +1,9 @@
 @extends("layout")
+
+@section("extended_header")
+	{{ HTML::script('js/transactions.js') }}
+@stop
+
 @section("content")
 	<div class="page-header">
 		<h1>
@@ -65,6 +70,7 @@
 			<table class="table table-hover table-condensed table-striped table-bordered">
 				<thead>
 					<tr>
+						<th></th>
 						<th class="text-center">#</th>
 						<th class="text-center">Date</th>
 						<th class="text-center">Tag</th>
@@ -78,6 +84,7 @@
 				<tbody>
 					<tr class="text-center">
 						{{ Form::open(array('route' => array('accounts.transactions.store',$account->id) )) }}
+							<td></td>
 							<td>
 								<!-- No Transaction number yet -->
 							</td>
@@ -109,6 +116,12 @@
 					</tr>
 					@foreach ($transactions as $index => $transaction)
 						<tr class="text-center">
+							<td>
+								<input type="checkbox" class="amount-included" 
+									data-type="{{ $transaction->withdraw ? 'withdraws' : 'deposits' }}"
+									value="{{ $transaction->amount }}"
+									checked>
+							</td>
 							<td>{{ count($transactions) - $index }}</td>
 							<td>{{ $transaction->date }}</td>
 							<td>{{ $transaction->tag }}</td>
@@ -130,14 +143,15 @@
 						</tr>
 					@endforeach
 					<tr class="text-center">
-						<td>Total</td>
 						<td></td>
 						<td></td>
 						<td></td>
-						<td>
+						<td></td>
+						<td></td>
+						<td id="withdraws">
 							{{ number_format($withdraws,2) }}
 						</td>
-						<td>
+						<td id="deposits">
 							{{ number_format($deposits,2) }}
 						</td>
 						<td></td>
