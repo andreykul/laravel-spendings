@@ -84,6 +84,7 @@ class TransactionsController extends BaseController {
 			->whereBetween("date",array($start_date,$end_date))
 			->whereIn('tag',$this->data['selected_tags'])
 			->orderBy('date','desc')
+			->orderBy('id','desc')
 			->get();
 		$this->data['withdraws'] = 0;
 		$this->data['deposits'] = 0;
