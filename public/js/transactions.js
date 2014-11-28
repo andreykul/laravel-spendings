@@ -15,6 +15,53 @@ $(function(){
 		//Update text
 		$('#'+type).text(amount.formatMoney(2,'.',','));
 	});
+
+	notes_textarea = $('#notes');
+	modal_title = $('.modal-title');
+	success_alert = $('.modal .alert-success');
+	error_alert = $('.modal .alert-danger');
+
+	$('.notes').click(function(){
+		var transaction_id = $(this).attr('data-transaction-id');
+		notes_textarea.val("");
+		modal_title.text("");
+
+		$('#save-notes').attr('data-transaction-id', transaction_id);
+
+		$.ajax({
+			type: "GET",
+			url : document.baseURI + "/" + transaction_id + "/notes",
+			success: function(transaction){
+				notes_textarea.val(transaction.notes);
+				modal_title.text(transaction.header);
+			}
+		});
+	});
+
+	$('#save-notes').click(function(){
+		var transaction_id = $(this).attr('data-transaction-id');
+
+		var notes = $('#notes').val();
+
+		$.ajax({
+			type: "POST",
+			url : document.baseURI + "/" + transaction_id + "/notes",
+			data: { notes: notes },
+			success: function(response){
+				if (response.error) {
+					error_alert.text(response.text);
+					error_alert.show();
+				}
+				else success_alert.show();
+				
+
+				setTimeout(function(){ 
+					success_alert.hide();
+					error_alert.hide();
+				}, 2000 );
+			}
+		});
+	})
 });
 
 Number.prototype.formatMoney = function(c, d, t){

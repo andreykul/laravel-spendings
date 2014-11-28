@@ -152,6 +152,77 @@ class TransactionsController extends BaseController {
 		return Redirect::back()->withStatus('Transaction has been removed.');
 	}
 
+	public function getNotes($account_id, $id)
+	{
+		$account = Auth::user()->accounts()->find($account_id);
+
+		if(! $account )
+			return Response::json(
+				array(
+					"header" => "Error",
+					"notes" => "You don't own this account."
+				)
+			);
+
+		$transaction = Transaction::find($id);
+
+		if ($transaction->account_id == $account_id)
+		{
+			return Response::json(
+				array(
+					"header" => $transaction->description,
+					"notes" => $transaction->notes
+				)
+			);
+		}
+		else return Response::json(
+			array(
+				"header" => "Error",
+				"notes" => "You are not allowed to modify this transaction."
+			)
+		);
+	}
+
+	public function postNotes($account_id, $id)
+	{
+		$account = Auth::user()->accounts()->find($account_id);
+
+		if(! $account )
+			return Response::json(
+				array(
+					"error" => true,
+					"text" => "You don't own this account."
+				)
+			);
+
+		$transaction = Transaction::find($id);
+
+		if(! $transaction)
+			return Response::json(
+				array(
+					"error" => true,
+					"text" => "No such transaction."
+				)
+			);
+
+		if ($transaction->account_id == $account_id)
+		{
+			$transaction->notes = Input::get('notes');
+			$transaction->save();
+			return Response::json(
+				array(
+					"error" => false
+				)
+			);
+		}
+		else return Response::json(
+			array(
+				"error" => true,
+				"text" => "You are not allowed to modify this transaction."
+			)
+		);
+	}	
+
 	private function updateMissingBalance($account)
 	{
 		$transactions = $account->transactions()->orderBy('date')->get();

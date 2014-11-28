@@ -15,7 +15,10 @@ Route::group(array('before' => 'auth'), function(){
 	Route::get('/', array('uses' => "AccountsController@index", 'as' => 'home'));
 	Route::post('accounts/{accounts}/share', array('uses' => "AccountsController@share", 'as' => 'accounts.share'));
 	Route::resource('accounts', 'AccountsController', array('only' => array('index','show','store','destroy')));
+	Route::get('accounts/{accounts}/transactions/{transactions}/notes', array('uses' => "TransactionsController@getNotes", 'as' => 'accounts.transactions.notes'));
+	Route::post('accounts/{accounts}/transactions/{transactions}/notes', array('uses' => "TransactionsController@postNotes", 'as' => 'accounts.transactions.notes'));
 	Route::resource('accounts.transactions', 'TransactionsController', array('only' => array('index','store','destroy')));
+
 });
 Route::get('login', array('uses' => 'UsersController@getLogin', 'as' => 'login'));
 Route::post('login', array('uses' => 'UsersController@postLogin', 'as' => 'login'));

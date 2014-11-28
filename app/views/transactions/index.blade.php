@@ -17,6 +17,8 @@
 		<i class="glyphicon glyphicon-chevron-left"></i> Back to Accounts
 	</a>
 
+	@include('transactions._notes')
+
 	<hr>
 
 	<div class="row">
@@ -125,7 +127,13 @@
 							<td>{{ count($transactions) - $index }}</td>
 							<td>{{ $transaction->date }}</td>
 							<td>{{ $transaction->tag }}</td>
-							<td>{{ $transaction->description }}</td>
+							<td>
+								@if ($transaction->description)
+									<button class="notes btn btn-block btn-link" data-transaction-id="{{ $transaction->id }}" data-toggle="modal" data-target=".modal">
+										{{ $transaction->description }}
+									</button>
+								@endif
+							</td>
 							@if ($transaction->withdraw)
 								<td>{{ number_format($transaction->amount,2) }}</td>
 								<td></td>
