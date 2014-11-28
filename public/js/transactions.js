@@ -20,6 +20,7 @@ $(function(){
 	modal_title = $('.modal-title');
 	success_alert = $('.modal .alert-success');
 	error_alert = $('.modal .alert-danger');
+	base_uri = $('base').attr('href');
 
 	$('.notes').click(function(){
 		var transaction_id = $(this).attr('data-transaction-id');
@@ -30,7 +31,7 @@ $(function(){
 
 		$.ajax({
 			type: "GET",
-			url : document.baseURI + "/" + transaction_id + "/notes",
+			url : base_uri + "/" + transaction_id + "/notes",
 			success: function(transaction){
 				notes_textarea.val(transaction.notes);
 				modal_title.text(transaction.header);
@@ -45,7 +46,7 @@ $(function(){
 
 		$.ajax({
 			type: "POST",
-			url : document.baseURI + "/" + transaction_id + "/notes",
+			url : base_uri + "/" + transaction_id + "/notes",
 			data: { notes: notes },
 			success: function(response){
 				if (response.error) {

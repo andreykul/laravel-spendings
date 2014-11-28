@@ -2,6 +2,7 @@
 
 @section("extended_header")
 	{{ HTML::script('js/transactions.js') }}
+	<base href="{{ route('accounts.transactions.index',$account->id) }}">
 @stop
 
 @section("content")
