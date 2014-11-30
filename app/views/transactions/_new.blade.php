@@ -11,7 +11,7 @@
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label for="date" class="control-label">Date:</label>
-							<input id="date" type="date" name="transaction[date]" class="form-control">	
+							<input id="date" type="date" name="transaction[date]" class="form-control" required>	
 						</div>
 						
 						<div class="form-group">
@@ -25,7 +25,7 @@
 
 						<div class="form-group">
 							<label for="amount" class="control-label">Amount:</label>
-							<input id="amount" type="number" step="0.01" name="transaction[amount]" class="form-control">
+							<input id="amount" type="number" step="0.01" name="transaction[amount]" class="form-control" required>
 						</div>
 
 						<div class="form-group">
