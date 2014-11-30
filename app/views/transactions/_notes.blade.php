@@ -1,4 +1,4 @@
-<div class="modal fade">
+<div id="transaction-notes" class="modal fade">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -7,12 +7,6 @@
 			</div>
 			
 			<div class="modal-body">
-				<div class="alert alert-danger" role="alert" style="display:none;">
-				</div>
-				<div class="alert alert-success" role="alert" style="display:none;">
-					Notes have been saved!
-				</div>
-				<textarea class="form-control" name="notes" id="notes" cols="30" rows="10"></textarea>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

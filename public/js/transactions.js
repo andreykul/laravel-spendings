@@ -16,53 +16,31 @@ $(function(){
 		$('#'+type).text(amount.formatMoney(2,'.',','));
 	});
 
-	notes_textarea = $('#notes');
-	modal_title = $('.modal-title');
-	success_alert = $('.modal .alert-success');
-	error_alert = $('.modal .alert-danger');
+	modal_body = $('#transaction-notes .modal-body');
+	modal_title = $('#transaction-notes .modal-title');
 	base_uri = $('base').attr('href');
 
 	$('.notes').click(function(){
 		var transaction_id = $(this).attr('data-transaction-id');
-		notes_textarea.val("");
 		modal_title.text("");
-
-		$('#save-notes').attr('data-transaction-id', transaction_id);
+		modal_body.text("");
 
 		$.ajax({
 			type: "GET",
 			url : base_uri + "/" + transaction_id + "/notes",
-			success: function(transaction){
-				notes_textarea.val(transaction.notes);
-				modal_title.text(transaction.header);
+			success: function(response){
+				if (response.error) {
+					modal_title.text("Error");
+					modal_body.text(response.text);
+				}
+				else {
+					modal_title.text(response.description);
+					modal_body.text(response.notes);
+				}
+				
 			}
 		});
 	});
-
-	$('#save-notes').click(function(){
-		var transaction_id = $(this).attr('data-transaction-id');
-
-		var notes = $('#notes').val();
-
-		$.ajax({
-			type: "POST",
-			url : base_uri + "/" + transaction_id + "/notes",
-			data: { notes: notes },
-			success: function(response){
-				if (response.error) {
-					error_alert.text(response.text);
-					error_alert.show();
-				}
-				else success_alert.show();
-				
-
-				setTimeout(function(){ 
-					success_alert.hide();
-					error_alert.hide();
-				}, 2000 );
-			}
-		});
-	})
 });
 
 Number.prototype.formatMoney = function(c, d, t){
