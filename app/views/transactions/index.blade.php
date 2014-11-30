@@ -106,7 +106,7 @@
 					</thead>
 					<tbody>
 						@foreach ($transactions as $index => $transaction)
-							<tr class="text-center {{ $transaction->withdraw ? 'danger' : 'success' }}">
+							<tr class="text-center">
 								<td>
 									<input type="checkbox" class="amount-included" 
 										data-type="{{ $transaction->withdraw ? 'withdraws' : 'deposits' }}"
@@ -124,7 +124,7 @@
 									@endif
 								</td>
 								<td>{{ number_format($transaction->amount,2) }}</td>
-								<td>{{ number_format($transaction->balance,2) }}</td>
+								<td class="{{ $transaction->withdraw ? 'danger' : 'success' }}">{{ number_format($transaction->balance,2) }}</td>
 								<td>
 									{{ Form::open(array('route' => array('accounts.transactions.destroy',$account->id,$transaction->id), 'method' => 'delete')) }}
 										<input type="hidden" name="id" value="{{ $transaction->id }}">
