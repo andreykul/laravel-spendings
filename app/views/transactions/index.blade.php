@@ -74,10 +74,10 @@
 				<legend>Summary</legend>
 				<ul class="list-unstyled">
 					<li>
-						<label>Withdraws:</label> ${{ number_format($withdraws,2) }}
+						<label>Withdraws:</label> $<span id="withdraws">{{ number_format($withdraws,2) }}</span>
 					</li>
 					<li>
-						<label>Deposits:</label> ${{ number_format($deposits,2) }}
+						<label>Deposits:</label> $<span id="deposits">{{ number_format($deposits,2) }}</1span>
 					</li>
 				</ul>
 				
